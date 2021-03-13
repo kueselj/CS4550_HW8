@@ -1,0 +1,194 @@
+<div>
+  <h2>
+    <%= @post.name %>
+  </h2>
+
+  <p>
+    Posted By: 
+    <img src="<%= Routes.user_path(@conn, :photo, @post.user) %>" alt="" width="40" height="40">
+    <%= @post.user.name %>
+  
+  <p>
+    When:
+    <%= @post.date %>
+  </p>
+  <%= @post.description %>
+</div>
+
+
+
+<%= if have_current_user?(@conn) do %>
+  <%= if current_user_id?(@conn, @post.user_id) do %>
+    <h2>Add Invite</h2>
+    
+    <%= render(
+      EventsWeb.InviteView,
+      "form.html",
+      changeset: @new_invite,
+      action: Routes.invite_path(@conn, :create)
+    ) %>
+    <p id="demo"></p>
+
+    <script>
+      document.getElementById("demo").innerHTML = 
+      "Share this Invite link!:<br>" + window.location.href;
+    </script>
+  <% end %>
+<% end %>
+
+<h3>
+  Current Invites:
+</h3>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Options</th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for invt <- @post.invites do %>
+    <tr>
+
+      <td>
+        <%= invt.name %>
+      </td>
+      
+      <td><%= invt.email %></td>
+      
+      <%# <td><%= post.description %>
+      <%# </td> %>
+      
+
+      <td>
+        
+        
+        <span><%= link "Show", to: Routes.invite_path(@conn, :show, invt) %></span>
+        <%= if current_user_id?(@conn, invt.user_id) do %>
+          <span><%= link "Edit", to: Routes.invite_path(@conn, :edit, invt) %></span>
+        <% end %>
+        <%= if current_user_id?(@conn, invt.user_id) do %>
+          <span><%= link "Delete", to: Routes.invite_path(@conn, :delete, invt), method: :delete, data: [confirm: "Are you sure?"] %></span>
+        <% end %>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h3>RSVP</h3>
+
+<%= if have_current_user?(@conn) do %>
+  <%= render(
+    EventsWeb.ResponseView,
+    "form.html",
+    changeset: @new_response,
+    action: Routes.response_path(@conn, :create)
+  ) %>
+<% end %>
+
+<h3>
+  Current Responses:
+</h3>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Attending?</th>
+      <th>Options</th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for resp <- @post.responses do %>
+    <tr>
+
+      <td>
+        <img src="<%= Routes.user_path(@conn, :photo, resp.user) %>" alt="" width="30" height="30">
+        <%= resp.user.name %>
+      </td>
+      
+      <td><%= resp.answer %></td>
+      
+      <%# <td><%= post.description %>
+      <%# </td> %>
+      
+
+      <td>
+        
+        
+        <span><%= link "Show", to: Routes.response_path(@conn, :show, resp) %></span>
+        <%= if current_user_id?(@conn, resp.user_id) do %>
+          <span><%= link "Edit", to: Routes.response_path(@conn, :edit, resp) %></span>
+        <% end %>
+        <%= if current_user_id?(@conn, resp.user_id) do %>
+          <span><%= link "Delete", to: Routes.response_path(@conn, :delete, resp), method: :delete, data: [confirm: "Are you sure?"] %></span>
+        <% end %>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+
+
+
+
+<h2>Add Comment</h2>
+
+<%= if have_current_user?(@conn) do %>
+  <%= render(
+    EventsWeb.CommentView,
+    "form.html",
+    changeset: @new_comment,
+    action: Routes.comment_path(@conn, :create)
+  ) %>
+<% end %>
+
+<%= if current_user_id?(@conn, @post.user_id) do %>
+    <span><%= link "Edit", to: Routes.post_path(@conn, :edit, @post) %></span>
+<% end %>
+
+<h2>Comments</h2>
+
+<%= for comm <- @post.comments do %>
+  <div class="card">
+    <div class="card-body">
+      <p>
+        <img src="<%= Routes.user_path(@conn, :photo, comm.user) %>" alt="" width="30" height="30">
+        <%= comm.user.name %>
+      </p>
+      
+      
+      
+      <p class="card-text"><%= comm.body %></p>
+      <span><%= link "Show", to: Routes.comment_path(@conn, :show, comm) %></span>
+
+      <%= if current_user_id?(@conn, comm.user_id) do %>
+          <span><%= link "Edit", to: Routes.comment_path(@conn, :edit, comm) %></span>
+      <% end %>
+      <%= if current_user_id?(@conn, comm.user_id) or current_user_id?(@conn, @post.user_id) do %>
+          <span><%= link "Delete", to: Routes.comment_path(@conn, :delete, comm), method: :delete, data: [confirm: "Are you sure?"] %></span>
+      <% end %>
+      
+      
+    </div>
+  </div>
+<% end %>
+
+
+

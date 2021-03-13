@@ -1,0 +1,64 @@
+<link id="themecss" rel="stylesheet" type="text/css" href="//www.shieldui.com/shared/components/latest/css/light/all.min.css" />
+<script type="text/javascript" src="//www.shieldui.com/shared/components/latest/js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="//www.shieldui.com/shared/components/latest/js/shieldui-all.min.js"></script>
+
+
+
+
+<%= form_for @changeset, @action, fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+
+    Event Name
+    <%= text_input f, :name, class: "form-control"%>
+    <%= error_tag f, :name %>
+    <p></p>
+    Date of the Event
+    <p></p>
+    <%= text_input f, :date, class: "form-control", id: "date"%>
+    <%= error_tag f, :date %>
+    <p></p>
+    Description
+    <%= textarea f, :description, class: "form-control" %>
+    <%= error_tag f, :description %>
+    
+    
+
+    <script>
+      $(document).ready(function(){
+        var date_input=$('input[id="date"]'); //our date input has the name "date"
+        
+        date_input.shieldDateTimePicker({
+            openOnFocus: false,
+            showButton: true,
+            editable: true,
+            messages: { calendarIconTooltip: "open" },
+            
+        });
+      })
+    </script>
+
+    
+
+    
+    
+
+    
+  </div>
+
+  
+
+  
+
+  
+  
+
+  <div>
+    <%= submit "Save", class: "btn btn-primary" %>
+  </div>
+<% end %>

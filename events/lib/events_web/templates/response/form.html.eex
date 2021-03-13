@@ -1,0 +1,38 @@
+<%= form_for @changeset, @action, fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+<div class="form-group">
+
+  <%= hidden_input f, :post_id %>
+  <%= hidden_input f, :user_id %>
+
+  
+  <%= label f, :Attending? %>
+  
+  <div class="col-lg-3">
+    <div class="input">
+     
+        <%= checkbox f, :answer, class: "form-control"%>
+        <%= textarea f, :body, class: "form-control", arialabel: "123"%>
+      
+    </div>
+  </div>
+  <%= error_tag f, :answer %>
+  <p>
+    
+    
+  </p>
+  
+  
+  <%= error_tag f, :body %>
+
+</div>
+
+  <div>
+    <%= submit "Save" %>
+  </div>
+<% end %>

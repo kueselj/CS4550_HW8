@@ -1,0 +1,46 @@
+<h1>Listing Events</h1>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Event Name</th>
+      <th>Posted By</th>
+      <th>Date</th>
+      <th>Options</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  <h1>Event Feed</h1>
+    <%= link "New Event", to: Routes.post_path(@conn, :new) %>
+<%= for post <- @posts do %>
+    <tr>
+
+      <td><%= post.name %></td>
+
+      <td>
+        <img src="<%= Routes.user_path(@conn, :photo, post.user) %>" alt="" width="30" height="30">
+        <%= post.user.name %>
+      </td>
+      
+      <td><%= post.date %></td>
+      
+      <%# <td><%= post.description %>
+      <%# </td> %>
+      
+
+      <td>
+        
+        <span><%= link "Show", to: Routes.post_path(@conn, :show, post) %></span>
+        <%= if current_user_id?(@conn, post.user_id) do %>
+          <span><%= link "Edit", to: Routes.post_path(@conn, :edit, post) %></span>
+        <% end %>
+        <%= if current_user_id?(@conn, post.user_id) do %>
+          <span><%= link "Delete", to: Routes.post_path(@conn, :delete, post), method: :delete, data: [confirm: "Are you sure?"] %></span>
+        <% end %>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+<span><%= link "New Event", to: Routes.post_path(@conn, :new) %></span>
